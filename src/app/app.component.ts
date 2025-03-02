@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ProductsService } from './core/services/product/products.service';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,15 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
-  title = 'AmazonClone';
+export class AppComponent implements OnInit {
+
+  constructor(private productService:ProductsService ){
+
+  }
+
+  ngOnInit(): void {
+    // this.productService.fetchProducts()
+  }
+
+  
 }

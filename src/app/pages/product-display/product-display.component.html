@@ -1,0 +1,194 @@
+<!-- Main Content Area -->
+<div class="container-fluid mt-3">
+    <div class="row">
+      <!-- Sidebar (Filters) -->
+        <div class="col-md-2 bg-light ps-2 py-3 sidebar sticky-sidebar">
+        <h5>Filters</h5>
+        <!-- Price Filter -->
+        <h6>Price Range</h6>
+        <ul class="list-unstyled filter-list">
+            <li>
+                <input type="radio" [(ngModel)]="filters.price" name="price" value="0-10"> $0 - $10
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.price" name="price" value="10-20"> $10 - $20
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.price" name="price" value="20-30"> $20 - $30
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.price" name="price" value="30"> $30 & Above
+            </li>
+        </ul>
+
+        <!-- Discount Filter -->
+        <h6>Discount Percentage</h6>
+        <ul class="list-unstyled filter-list">
+            <li>
+                <input type="radio" [(ngModel)]="filters.discount" name="discount" value="5"> 5% & Above
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.discount" name="discount" value="10"> 10% & Above
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.discount" name="discount" value="15"> 15% & Above
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.discount" name="discount" value="20"> 20% & Above
+            </li>
+        </ul>
+
+        <!-- Availability -->
+        <h6>Availability</h6>
+        <ul class="list-unstyled filter-list">
+            <li>
+                <input type="radio" [(ngModel)]="filters.availability" name="availability" value="In Stock"> In Stock
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.availability" name="availability" value="Low Stock"> Low Stock
+            </li>
+        </ul>
+
+        <!-- Ratings -->
+        <h6>Customer Ratings</h6>
+        <ul class="list-unstyled filter-list">
+            <li>
+                <input type="radio" [(ngModel)]="filters.rating" name="rating" value="4.5"> ⭐ 4.5 & Above
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.rating" name="rating" value="3.5"> ⭐ 3.5 - 4.5
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.rating" name="rating" value="2.6"> ⭐ 2.5 - 3.5
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.rating" name="rating" value="2.5"> ⭐ Below 2.5
+            </li>
+        </ul>
+
+        <!-- Shipping -->
+        <h6>Shipping Information</h6>
+        <ul class="list-unstyled filter-list">
+            <li>
+                <input type="radio" [(ngModel)]="filters.shipping" name="shipping" value="Ships overnight"> Ships overnight
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.shipping" name="shipping" value="Ships in 1-2 Business Days"> Ships in 1-2 Business Days
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.shipping" name="shipping" value="Ships in 3-5 Business Days"> Ships in 3-5 Business Days
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.shipping" name="shipping" value="Ships in 2 Weeks"> Ships in 2 Weeks
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.shipping" name="shipping" value="Ships in 1 Month"> Ships in 1 Month
+            </li>
+        </ul>
+
+        <!-- Return Policy -->
+        <h6>Return Policy</h6>
+
+        <ul class="list-unstyled filter-list">
+            <li>
+                <input type="radio" [(ngModel)]="filters.return" name="return" value="90 Days Return"> 90 Days Return
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.return" name="return" value="60 Days Return"> 60 Days Return
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.return" name="return" value="30 Days Return"> 30 Days Return
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.return" name="return" value="7 Days Return"> 7 Days Return
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.return" name="return" value="No return policy"> No return policy
+            </li> 
+        </ul>
+
+        <!-- Warranty -->
+        <h6>Warranty Information</h6>
+        <ul class="list-unstyled filter-list">
+            <li>
+              <input type="radio" [(ngModel)]="filters.warranty" name="warranty" value="Lifetime warranty"> Lifetime warranty
+            </li>
+            <li>
+              <input type="radio" [(ngModel)]="filters.warranty" name="warranty" value="5 year warranty"> 5 year warranty
+            </li>
+            <li>
+              <input type="radio" [(ngModel)]="filters.warranty" name="warranty" value="3 year warranty"> 3 year warranty
+            </li>
+            <li>
+              <input type="radio" [(ngModel)]="filters.warranty" name="warranty" value="2 year warranty"> 2 year warranty
+            </li>
+            <li>
+              <input type="radio" [(ngModel)]="filters.warranty" name="warranty" value="1 year warranty"> 1 year warranty
+            </li>
+            <li>
+              <input type="radio" [(ngModel)]="filters.warranty" name="warranty" value="6 months warranty"> 6 months warranty
+            </li>
+            <li>
+              <input type="radio" [(ngModel)]="filters.warranty" name="warranty" value="3 months warranty"> 3 months warranty
+            </li>
+            <li>
+              <input type="radio" [(ngModel)]="filters.warranty" name="warranty" value="1 month warranty"> 1 month warranty
+            </li>
+            <li>
+              <input type="radio" [(ngModel)]="filters.warranty" name="warranty" value="1 week warranty"> 1 week warranty
+            </li>
+            <li>
+              <input type="radio" [(ngModel)]="filters.warranty" name="warranty" value="No warranty"> No warranty
+            </li>
+          </ul>
+        
+        <!-- Minimum Order Quantity -->
+        <h6>Minimum Order Quantity</h6>
+        <ul class="list-unstyled filter-list">
+            <li>
+                <input type="radio" [(ngModel)]="filters.minOrder" name="minOrder" value="1-10"> 
+                1 - 10 Items
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.minOrder" name="minOrder" value="10-20"> 
+                10 - 20 Items
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.minOrder" name="minOrder" value="20-30"> 
+                20 - 30 Items
+            </li>
+            <li>
+                <input type="radio" [(ngModel)]="filters.minOrder" name="minOrder" value="30-50"> 
+                30 - 50 Items
+            </li>
+        </ul>
+        <button class="btn btn-primary w-100 mt-2" (click)="resetFilters()">Reset Filters</button>
+      </div>
+
+      <!-- Product Display Area -->
+      <div class="col-md-10">
+        <div class="container mt-3">
+            <div class="row">
+                <ng-container *ngFor="let product of filteredProductList">
+                    <!-- Horizontal Cards -->
+                    <ng-container *ngIf="isHorizontalCardCategory(product.category); else otherCategory">
+                        <div class="col-12 mb-3">
+                            <app-product-card [product]="product" class="w-100"></app-product-card>
+                        </div>
+                    </ng-container>
+        
+                    <!-- Vertical Cards -->
+                    <ng-template #otherCategory>
+                        <div class="col-md-3 mb-3">
+                            <app-product-card [product]="product"></app-product-card>
+                        </div>
+                    </ng-template>
+                </ng-container>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+  
+
+

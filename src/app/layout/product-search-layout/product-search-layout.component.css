@@ -1,0 +1,63 @@
+/* General */
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Navbar */
+  .navbar {
+    padding: 10px 15px;
+  }
+  
+  .nav-link {
+    font-size: 14px;
+  }
+  
+  .btn-warning {
+    background-color: #ff9900;
+    border: none;
+  }
+  
+  /* Sidebar (Filters) */
+  .sticky-sidebar {
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+  }
+  
+  .filter-list li {
+    padding: 4px 0;
+  }
+  
+  .filter-list input {
+    margin-right: 8px;
+  }
+  
+  /* Responsive Sidebar for Small Screens */
+  @media (max-width: 768px) {
+    .sticky-sidebar {
+      position: static;
+    }
+  }
+  
+  /* Footer */
+  footer h6 {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  footer ul {
+    padding-left: 0;
+  }
+  
+  footer ul li {
+    font-size: 12px;
+  }
+  
+  footer a {
+    text-decoration: none;
+  }
+  
+  footer a:hover {
+    text-decoration: underline;
+  }
+  

@@ -1,0 +1,57 @@
+<div class="container mt-5">
+    <div class="row">
+      <!-- Product Images -->
+      <div class="col-md-5">
+        <img [src]="product.thumbnail" class="img-fluid main-image" alt="Product Image">
+        <div class="thumbnails mt-2">
+          <img *ngFor="let img of product.images" [src]="img" class="img-thumbnail">
+        </div>
+      </div>
+  
+      <!-- Product Details -->
+      <div class="col-md-7">
+        <h2>{{ product.title }}</h2>
+        <p class="text-muted">{{ product.brand }} | SKU: {{ product.sku }}</p>
+        
+        <h4 class="text-success">
+          {{ product.price | currency }}
+          <small class="text-danger">(-{{ product.discountPercentage }}%)</small>
+        </h4>
+        
+        <p [ngClass]="{'text-danger': product.availabilityStatus === 'Low Stock', 'text-success': product.availabilityStatus !== 'Low Stock'}">
+          Availability: {{ product.availabilityStatus }} ({{ product.stock }} in stock)
+        </p>
+  
+        <p class="rating">⭐ {{ product.rating }} / 5</p>
+  
+        <p><strong>Category:</strong> {{ product.category }}</p>
+        <p><strong>Tags:</strong> <span *ngFor="let tag of product.tags">{{ tag }}, </span></p>
+  
+        <p>{{ product.description }}</p>
+        <p><strong>Weight:</strong> {{ product.weight }}g</p>
+        <p><strong>Dimensions:</strong> {{ product.dimensions.width }} x {{ product.dimensions.height }} x {{ product.dimensions.depth }} cm</p>
+        <p><strong>Warranty:</strong> {{ product.warrantyInformation }}</p>
+        <p><strong>Shipping:</strong> {{ product.shippingInformation }}</p>
+        <p><strong>Return Policy:</strong> {{ product.returnPolicy }}</p>
+        <p><strong>Minimum Order Quantity:</strong> {{ product.minimumOrderQuantity }}</p>
+  
+        <p><strong>Barcode:</strong> {{ product.meta.barcode }}</p>
+        <p><strong>QR Code:</strong> <img [src]="product.meta.qrCode" alt="QR Code" width="100"></p>
+  
+        <button class="btn btn-warning btn-lg me-2">Buy Now</button>
+        <button class="btn btn-primary btn-lg">Add to Cart</button>
+      </div>
+    </div>
+  
+    <!-- Reviews Section -->
+    <div class="mt-4">
+      <h3>Customer Reviews</h3>
+      <div *ngFor="let review of product.reviews" class="review-box">
+        <p><strong>{{ review.reviewerName }}</strong> (⭐ {{ review.rating }}/5)</p>
+        <p>{{ review.comment }}</p>
+        <p><small>Date: {{ review.date | date: 'medium' }}</small></p>
+        <hr>
+      </div>
+    </div>
+  </div>
+  

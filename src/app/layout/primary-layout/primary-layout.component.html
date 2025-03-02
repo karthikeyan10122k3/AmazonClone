@@ -1,0 +1,183 @@
+<!-- Primary Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <!-- Amazon Logo -->
+    <a class="navbar-brand" routerLink="/home">
+      <img src="/public/images/amazon_logo.png" alt="Amazon.in" height="30">
+    </a>
+
+    <!-- Location -->
+    <div class="d-flex align-items-center text-light ms-3">
+      <i class="bi bi-geo-alt-fill"></i>
+      <div class="ms-2">
+        <small>Delivering to chennai 600066
+          <!-- <span>{{ userLocation || "Your Location" }}</span> -->
+        </small><br>
+        <a href="#" class="text-light">
+          <i class="fa-solid fa-location-dot"></i> Update location
+        </a>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <form class="d-flex flex-grow-1 ms-3" (submit)="searchProduct()">
+      <select class="form-select custom-dropdown select-tag" [(ngModel)]="category" name="category">
+        <option value="All">All</option>
+        <option *ngFor="let cat of categoryList" [value]="cat">{{ cat }}</option>
+      </select>
+
+      <input class="form-control"
+        type="search"
+        placeholder="Search Amazon.in"
+        [(ngModel)]="searchInput"
+        name="searchInput"
+        (keyup.enter)="searchProduct()"
+        aria-label="Search Amazon">
+
+      <button type="submit" class="btn btn-warning">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </form>
+    <!-- Language -->
+    <div class="d-flex align-items-center text-light me-3">
+      <!-- <img src="assets/india_flag.png" width="20" height="15" class="me-1"> -->
+      <span>EN</span>
+    </div>
+
+    <!-- Account, Orders, Cart -->
+    <div class="d-flex align-items-center">
+      <!-- Account Dropdown -->
+      <div class="dropdown mx-3">
+        <a class="nav-link text-light dropdown-toggle" id="accountDropdown" role="button">
+          Hello, Sign in<br><strong>Account & Lists</strong>
+        </a>
+
+        <!-- Dropdown Content -->
+        <div class="dropdown-menu account-dropdown" aria-labelledby="accountDropdown">
+          <div class="p-3 border-bottom text-center">
+            <button class="btn btn-warning w-100">Sign in</button>
+            <p class="small mt-2 mb-0">New customer? <a href="#" class="text-primary">Start here.</a></p>
+          </div>
+          <div class="row p-3">
+            <!-- Your Lists -->
+            <div class="col-4">
+              <h6>Your Lists</h6>
+              <ul class="list-unstyled">
+                <li><a href="#">Create a Wish List</a></li>
+                <li><a href="#">Wish from Any Website</a></li>
+                <li><a href="#">Baby Wishlist</a></li>
+                <li><a href="#">Discover Your Style</a></li>
+                <li><a href="#">Explore Showroom</a></li>
+              </ul>
+            </div>
+
+            <!-- Your Account -->
+            <div class="col-8">
+              <h6>Your Account</h6>
+              <ul class="list-unstyled">
+                <li><a href="#">Your Account</a></li>
+                <li><a href="#">Your Orders</a></li>
+                <li><a href="#">Your Wish List</a></li>
+                <li><a href="#">Your Recommendations</a></li>
+                <li><a href="#">Your Prime Membership</a></li>
+                <li><a href="#">Your Subscribe & Save Items</a></li>
+                <li><a href="#">Memberships & Subscriptions</a></li>
+                <li><a href="#">Your Seller Account</a></li>
+                <li><a href="#">Manage Your Content and Devices</a></li>
+                <li><a href="#">Register for a Free Business Account</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a routerLink="/orders" class="nav-link text-light mx-3">Returns<br><strong>& Orders</strong></a>
+      
+      <a routerLink="/cart" class="nav-link text-light mx-3 position-relative">
+        <i class="fa-solid fa-cart-shopping fa-2xl"></i>
+        <!-- <span *ngIf="cartItemCount > 0" class="position-absolute top-0 start-100 translate-middle badge bg-danger">
+          {{ cartItemCount }}
+        </span> -->
+        Cart
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Secondary Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand text-light" routerLink="/categories">
+      <i class="fa-solid fa-bars"></i> All
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item" *ngFor="let link of navLinks">
+          <a class="nav-link text-light" [routerLink]="link.url">{{ link.label }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Router Outlet -->
+<router-outlet></router-outlet>
+
+<!-- Footer -->
+<footer class="container-fluid bg-dark text-light py-4">
+  <div class="text-center mb-3">
+    <a href="#top" class="text-light">Back to top</a>
+  </div>
+
+  <div class="row text-center text-md-start">
+    <div class="col-md-3">
+      <h6>Get to Know Us</h6>
+      <ul class="list-unstyled">
+        <li><a href="#" class="text-light">About Amazon</a></li>
+        <li><a href="#" class="text-light">Careers</a></li>
+        <li><a href="#" class="text-light">Press Releases</a></li>
+        <li><a href="#" class="text-light">Amazon Science</a></li>
+      </ul>
+    </div>
+
+    <div class="col-md-3">
+      <h6>Connect with Us</h6>
+      <ul class="list-unstyled">
+        <li><a href="#" class="text-light">Facebook</a></li>
+        <li><a href="#" class="text-light">Twitter</a></li>
+        <li><a href="#" class="text-light">Instagram</a></li>
+      </ul>
+    </div>
+
+    <div class="col-md-3">
+      <h6>Make Money with Us</h6>
+      <ul class="list-unstyled">
+        <li><a href="#" class="text-light">Sell on Amazon</a></li>
+        <li><a href="#" class="text-light">Amazon Global Selling</a></li>
+        <li><a href="#" class="text-light">Become an Affiliate</a></li>
+        <li><a href="#" class="text-light">Advertise Your Products</a></li>
+      </ul>
+    </div>
+
+    <div class="col-md-3">
+      <h6>Let Us Help You</h6>
+      <ul class="list-unstyled">
+        <li><a href="#" class="text-light">Your Account</a></li>
+        <li><a href="#" class="text-light">Returns Centre</a></li>
+        <li><a href="#" class="text-light">Amazon App Download</a></li>
+        <li><a href="#" class="text-light">Help</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="bg-light" />
+
+  <div class="text-center">
+    <p>&copy; 1996-2025, Amazon.com, Inc. or its affiliates</p>
+  </div>
+</footer>

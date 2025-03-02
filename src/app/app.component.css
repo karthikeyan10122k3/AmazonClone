@@ -1,0 +1,42 @@
+#carouselExampleAutoplaying {
+    width: 100%; /* Make carousel full width */
+    height: 100vh; /* Full height */
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .carousel-inner {
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Light shadow for a more polished look */
+  }
+  
+  .carousel-item img {
+    object-fit: cover; /* Ensure the images fill the container properly */
+    border-radius: 10px; /* Rounded corners on images */
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+  }
+  
+  .carousel-control-prev, .carousel-control-next {
+    filter: invert(100%); /* Invert arrow color to white */
+    background-color: rgba(0, 0, 0, 0.5); /* Subtle background for the control buttons */
+    border-radius: 50%; /* Circular buttons */
+    height: 40px;
+    width: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .carousel-control-prev-icon, .carousel-control-next-icon {
+    background-color: white; /* White icons */
+    border-radius: 50%;
+  }
+  
+  .carousel-control-prev:hover, .carousel-control-next:hover {
+    background-color: rgba(0, 0, 0, 0.7); /* Darker background on hover */
+  }
+  
+  .carousel-indicators {
+    display: none; /* Hide the default indicators */
+  }
+  
