@@ -29,6 +29,8 @@ export class ProductDisplayComponent {
     minOrder: ''
   };
 
+  
+
   productService = inject(ProductsService);
   activatedRoute = inject(ActivatedRoute);
   route = inject(Router);
@@ -37,10 +39,10 @@ export class ProductDisplayComponent {
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(query => {
-      this.searchedProduct = query['s'] || ''; 
-      this.category = query['c'] || '';
+      this.searchedProduct = query['search'] || ''; 
+      this.category = query['category'] || '';
 
-      if (!this.searchedProduct) {
+      if (!this.searchedProduct && this.category === "All") {  //No  Search Product and No Category!
         this.route.navigate(['/home']);
       }
 
@@ -51,27 +53,28 @@ export class ProductDisplayComponent {
     });
   }
 
-  horizontalCardCategory = [
-    "smartphones", "laptops", "automotive", 
-    "motorcycle", "home-decoration", "furniture", "lighting"
-  ];
-  isHorizontalCardCategory(category: string): boolean {
-    return this.horizontalCardCategory.includes(category);
-  }
+
+
 
   getSearchedProducts() {
-    if(this.category.includes("All")){
+    
+    if(this.searchedProduct === "" && this.category !== "All"){ // No Search Product But There is Category!
       this.filteredProductList = this.productList.filter(product => 
-        product.title.toLowerCase().includes(this.searchedProduct.toLowerCase())
+        product.category.trim().toLowerCase() === this.category.trim().toLowerCase());
+    }
+    else if(this.searchedProduct && this.category === "All"){  // There is Search Product But  No Category!
+      this.filteredProductList = this.productList.filter(product => 
+        product.title.trim().toLowerCase().includes(this.searchedProduct.trim().toLowerCase())
       );
     }
+    else if(this.searchedProduct && this.category !== "All"){  // There is Search Product and Category!
       this.filteredProductList = this.productList.filter(product => 
-        product.title.toLowerCase().includes(this.searchedProduct.toLowerCase()) &&
-        (this.category ? product.category === this.category : true)
+        (product.title.trim().toLowerCase().includes(this.searchedProduct.trim().toLowerCase())) &&
+        (product.category.trim().toLowerCase() === this.category.trim().toLowerCase())
       );
+    }
+    
   }
-
-
 
   resetFilters() {
     this.filters = {
@@ -84,6 +87,14 @@ export class ProductDisplayComponent {
       warranty: '',
       minOrder: ''
     };
+  }
+
+  horizontalCardCategory = [
+    "smartphones", "laptops", "automotive", 
+    "motorcycle", "home-decoration", "furniture", "lighting"
+  ];
+  isHorizontalCardCategory(category: string): boolean {
+    return this.horizontalCardCategory.includes(category);
   }
 }
 

@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { ProductDisplayComponent } from './pages/product-display/product-display.component';
 import { PrimaryLayoutComponent } from './layout/primary-layout/primary-layout.component';
-import { ProductSearchLayoutComponent } from './layout/product-search-layout/product-search-layout.component';
 import { ProductDetailsComponent } from './pages/product-details/product-details.component';
+import { CartComponent } from './pages/cart-display/cart-display.component';
 
 export const routes: Routes = [
     {
@@ -11,10 +11,6 @@ export const routes: Routes = [
         redirectTo: "home",
         pathMatch: "full"
     },
-    // {
-    //     path:"home",
-    //     component:PrimaryLayoutComponent
-    // }    
     {
         path:"home",
         component:PrimaryLayoutComponent ,
@@ -27,7 +23,6 @@ export const routes: Routes = [
     },
     {
         path:"search",
-        // component:ProductSearchLayoutComponent,
         component:PrimaryLayoutComponent,
         children:[
             {
@@ -43,6 +38,16 @@ export const routes: Routes = [
             {
                 path:"",
                 component:ProductDetailsComponent
+            }   
+    ]
+    },
+    {
+        path:"cart",
+        component:PrimaryLayoutComponent,
+        children:[
+            {
+                path:"",
+                component:CartComponent
             }   
     ]
     },

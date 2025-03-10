@@ -1,0 +1,50 @@
+<div class="row mb-3 border-bottom pb-3">
+    <!-- Thumbnail -->
+    <div class="col-2 d-flex align-items-center">
+      <a [routerLink]="['/product-details', cartItem.id]">
+        <img [src]="cartItem.thumbnail" [alt]="cartItem.title" class="img-fluid rounded">
+      </a>
+    </div>
+  
+    <!-- Details -->
+    <div class="col-6">
+      <a [routerLink]="['/product-details', cartItem.id]" class="no-underline">
+        <h5 class="fw-bold text-dark ">{{ cartItem.title }}</h5>
+      </a>
+      <p class="text-success fw-bold" *ngIf="cartItem.availabilityStatus === 'In Stock'">In stock</p>
+      <p class="text-danger fw-bold" *ngIf="cartItem.availabilityStatus === 'Low Stock'">Only {{ cartItem.stock }} left in stock</p>
+      <p class="text-muted">Eligible for FREE Shipping</p>
+  
+      <div class="d-flex align-items-center mt-2">
+        <!-- Quantity Control -->
+        <div class="d-flex border rounded px-2 py-1">
+          @if (cartItem.quantity === 1) {
+            <i class="fa-solid fa-trash-can me-2 fa-xl" (click)="deleteItem(cartItem)"></i>
+          } @else {
+            <button class="btn btn-outline-secondary btn-sm" 
+                    (click)="decreaseQuantity(cartItem)" 
+                    [disabled]="cartItem.quantity === 1">&#8722;</button>
+          }
+          <span class="mx-2 fw-bold">{{ cartItem.quantity }}</span>
+          <button class="btn btn-outline-secondary btn-sm" 
+                  (click)="increaseQuantity(cartItem)" 
+                  [disabled]="cartItem.quantity >= cartItem.stock">&#43;</button>
+            
+        </div>
+  
+        <!-- Actions -->
+        <button class="btn btn-outline-danger btn-sm ms-3" (click)="deleteItem(cartItem)">Delete</button>
+        <button class="btn btn-outline-secondary btn-sm ms-2">Save for later</button>
+      </div>
+      <p *ngIf="cartItem.quantity >= cartItem.stock" class="text-warning">This Seller only has <span class="fw-bold">{{cartItem.stock}} </span> of these available</p>
+      <p *ngIf="cartItem.quantity >= cartItem.minimumOrderQuantity" class="text-warning">This Seller has a limit of <span class="fw-bold">{{cartItem.minimumOrderQuantity}}</span> per customer</p>
+    </div>
+  
+    <!-- Price -->
+    <div class="col-4 text-end">
+      <p class="text-dark fw-bold fs-5">
+        <span class="text-light bg-danger border rounded px-2">-{{ cartItem.discountPercentage }}%</span> {{ cartItem.price | currency:'INR' }}
+      </p>
+      <p class="text-muted"><del>M.R.P.: {{ cartItem.price / (1 - cartItem.discountPercentage / 100) | currency:'INR' }}</del></p>
+    </div>
+  </div>

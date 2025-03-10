@@ -1,0 +1,38 @@
+<div class="container-fluid mt-3">
+  <div class="row">
+    <!-- Shopping Cart Container -->
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-light">
+          <h3>Shopping Cart</h3>
+          <!-- <ng-container class="d-flex justify-content-between align-items-center">
+            <a href="#" class="text-primary">Deselect all items</a>
+            <p class="mb-0">Price</p>
+          </ng-container> -->
+        </div>
+        <div class="card-body">
+          <app-cart-card 
+            *ngFor="let item of cartItems"
+            [cartItem]="item">
+          </app-cart-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subtotal Container -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-light">
+          <h5>Order Summary</h5>
+        </div>
+        <div class="card-body">
+          <p class="text-success">
+            <i class="fa-solid fa-check"></i> Your order is eligible for FREE Delivery.
+          </p>
+          <p>Subtotal ({{ cartItems.length }} items): <strong>{{ subtotal | currency:'INR' }}</strong></p>
+          <button class="btn btn-warning w-100">Proceed to Buy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

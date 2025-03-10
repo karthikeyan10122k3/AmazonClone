@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-primary-layout',
@@ -9,9 +9,18 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
   templateUrl: './primary-layout.component.html',
   styleUrl: './primary-layout.component.css'
 })
-export class PrimaryLayoutComponent {
-  category: string = "All"; 
-  searchInput: string = "";
+export class PrimaryLayoutComponent implements OnInit {
+  activatedRoute = inject(ActivatedRoute);
+  router = inject(Router);
+  category!: string ; 
+  searchInput!: string ;
+
+  ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe(query=>{
+      this.category = query['category'] || 'All'
+      this.searchInput = query['search'] || ''
+    })
+  }
 
   navLinks = [
     { label: 'Fresh', url: '/fresh' },
@@ -31,13 +40,13 @@ export class PrimaryLayoutComponent {
   ];
 
   categoryList = [
-    "beauty",
+    "All",
+    "Beauty",
     "Fragrances",
     "Furniture",
     "Groceries",
     "smartphones",
     "laptops",
-    "fragrances",
     "skincare",
     "home-decoration",
     "tops",
@@ -55,13 +64,18 @@ export class PrimaryLayoutComponent {
     "lighting"
   ];
 
-  router = inject(Router);
 
   searchProduct() {
-    if (this.searchInput.trim()) { 
+    // if (!this.searchInput && this.category === "All") {  //No  Search Product and No Category!
+    //   this.router.navigate(['/home']);
+    //   return
+    // }
+    if (this.searchInput.trim() || this.category.trim()) { 
       this.router.navigate(["/search"], {
-        queryParams: { c: this.category, s: this.searchInput.trim() }
+        queryParams: { category: this.category, search: this.searchInput}
       });
     }
+
+
   }
 }

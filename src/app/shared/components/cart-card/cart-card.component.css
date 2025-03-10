@@ -1,0 +1,10 @@
+
+
+.fa-trash-can {
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.no-underline{
+  text-decoration: none;
+}
