@@ -1,3 +1,6 @@
+![Project Status](https://img.shields.io/badge/Status-In%20Progress-yellow)
+
+
 # AmazonClone
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.7.
