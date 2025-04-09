@@ -7,13 +7,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class OrdersService {
-
-  
   private ordersSubject = new BehaviorSubject<{ productId: number, quantity: number }[]>([]);
-  private http: HttpClient;
 
   constructor(private authService: AuthService, httpClient: HttpClient) {
-    this.http = httpClient;
     this.initializeOrders();
   }
 
@@ -38,7 +34,6 @@ export class OrdersService {
     user.orders = mergedOrders;
 
     this.ordersSubject.next(mergedOrders);
-    console.log(this.ordersSubject.value);
     
 
   }

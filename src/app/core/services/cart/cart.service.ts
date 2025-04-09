@@ -138,7 +138,7 @@ export class CartService {
 
     this.authService.setCurrentUser(user);
 
-    this.http.put(`Add your url for updating user`, user).subscribe({
+    this.http.put(`Add your url for updating user da venky`, user).subscribe({
       next: () => console.log('User cart synced with backend'),
       error: (err) => console.error('Failed to update user on backend:', err)
     });

@@ -7,8 +7,8 @@ import { User } from '../../models/user/user';
   providedIn: 'root'
 })
 export class AuthService {
-  private signUpUrl = '/api/signup'; 
-  private loginUrl = '/api/login'; 
+  private signUpUrl = 'add your signup api da venky'; 
+  private loginUrl = 'add your login api da venky'; 
 
   private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
   currentUser$ = this.currentUserSubject.asObservable();
@@ -33,23 +33,9 @@ export class AuthService {
 
   // Login
   login(contact: string, password: string): Observable<User> {
-    const user = {
-      fullName: 'John Doe',
-      email: 'john@example.com',
-      mobile: '1234567890',
-      password: 'securepassword',
-      cart: [],
-      orders: []
-    };
-    
-    // Save to localStorage
-    localStorage.setItem('user', JSON.stringify(user));
-    
     return this.http.post<User>(this.loginUrl, { contact, password }).pipe(
       tap(user => this.setUser(user))
     );
-
-    
   }
 
   // Storing user in local storage 

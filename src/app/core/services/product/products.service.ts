@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class ProductsService {
-  private PRODUCT_API = 'https://dummyjson.com/products';
+  private PRODUCT_API = 'https://dummyjson.com/products'; // change this to you api da venky but be sure to add the type same as the one in this api
   private products = new BehaviorSubject<Product[]>([]);
   private http = inject(HttpClient);
   private router = inject(Router);
