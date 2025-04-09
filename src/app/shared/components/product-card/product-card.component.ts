@@ -2,12 +2,12 @@ import { Component, Input } from '@angular/core';
 import { Product } from '../../../core/models/product/product';
 import { CommonModule, CurrencyPipe, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ProductDescriptionShorteningPipe } from '../../pipes/productDescriptionShortening/product-description-shortening.pipe';
 import { CartService } from '../../../core/services/cart/cart.service';
+import { ProductDescriptionShorteningPipe } from '../../../core/pipes/productDescriptionShortening/product-description-shortening.pipe';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, NgIf, CurrencyPipe, RouterLink, ProductDescriptionShorteningPipe ,],
+  imports: [CommonModule, NgIf, CurrencyPipe, RouterLink, ProductDescriptionShorteningPipe],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.css'
 })
@@ -36,7 +36,7 @@ export class ProductCardComponent {
     "motorcycle",
     "lighting"
   ]
-  
+  horizontalCardCategory = ["smartphones", "laptops","automotive", "motorcycle", "home-decoration", "furniture", "lighting"];
   
   constructor(private cartService: CartService) {}
 
@@ -46,18 +46,17 @@ export class ProductCardComponent {
     });
   }
   
-horizontalCardCategory = ["smartphones", "laptops","automotive", "motorcycle", "home-decoration", "furniture", "lighting"];
- isHorizontalCardCategory(category: string): boolean {
-   return this.horizontalCardCategory.includes(category);
- }
+  isHorizontalCardCategory(category: string): boolean {
+    return this.horizontalCardCategory.includes(category);
+  }
 
- addItemToCart(product: Product){
-  this.cartService.addItem(product)
- }
+  addItemToCart(product: Product){
+    this.cartService.addItem(product)
+  }
 
- removeItemFromCart(product: Product){
-  this.cartService.removeItem(product)
- }
+  removeItemFromCart(product: Product){
+    this.cartService.removeItem(product)
+  }
 
 
 }

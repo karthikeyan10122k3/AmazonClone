@@ -4,6 +4,8 @@ import { ProductDisplayComponent } from './pages/product-display/product-display
 import { PrimaryLayoutComponent } from './layout/primary-layout/primary-layout.component';
 import { ProductDetailsComponent } from './pages/product-details/product-details.component';
 import { CartComponent } from './pages/cart-display/cart-display.component';
+import { LoginComponent } from './pages/auth/login/login.component';
+import { RegistrationComponent } from './pages/auth/registration/registration.component';
 
 export const routes: Routes = [
     {
@@ -50,5 +52,13 @@ export const routes: Routes = [
                 component:CartComponent
             }   
     ]
+    },
+    {
+        path:"login",
+        component:LoginComponent,
+    },
+    {
+        path:"register",
+        component:RegistrationComponent,
     },
 ];

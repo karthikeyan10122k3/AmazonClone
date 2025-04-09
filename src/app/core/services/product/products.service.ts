@@ -52,4 +52,14 @@ export class ProductsService {
       })
     );
   }
+
+  syncProducts(updatedList: Product[]) {
+    updatedList.forEach(product => {
+      this.http.put(`Add your product update URL/${product.id}`, product).subscribe({
+        next: () => console.log(`Product ${product.id} stock updated`),
+        error: (err) => console.error(`Error updating product ${product.id}:`, err)
+      });
+    });
+  }
+  
 }

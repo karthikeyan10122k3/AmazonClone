@@ -18,7 +18,6 @@ export class CartCardComponent {
 
   }
 
-
   increaseQuantity(product: CartItem) {
     this.cartService.increaseQuantity(product);
     this.cartService.updateSubtotal();

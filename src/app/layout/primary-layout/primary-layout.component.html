@@ -1,8 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="top">
   <div class="container-fluid">
     <!-- Amazon Logo -->
     <a class="navbar-brand" routerLink="/home">
-      <img src="assets/images/amazon_logo.png" alt="Amazon.in" height="30">
+      <img src="https://upload.wikimedia.org/wikipedia/donate/f/fd/Amazon-logo-white.svg" alt="Amazon.in" height="30">
     </a>
     <!-- Location -->
     <div class="d-flex align-items-center text-light ms-3">
@@ -43,15 +43,24 @@
     <div class="d-flex align-items-center">
       <!-- Account Dropdown -->
       <div class="dropdown mx-3">
-        <a class="nav-link text-light dropdown-toggle" id="accountDropdown" role="button" data-bs-toggle="dropdown">
+        <a class="nav-link text-light dropdown-toggle" 
+        id="accountDropdown" 
+        role="button" 
+        data-bs-toggle="dropdown" 
+        *ngIf="!checkUser()">
           Hello, Sign in<br><strong>Account & Lists</strong>
+        </a>
+        <a class="nav-link text-light dropdown-toggle" id="accountDropdown" role="button" data-bs-toggle="dropdown"
+        *ngIf="checkUser()">
+          Hello, {{username}}<br><strong>Account & Lists</strong>
         </a>
 
         <!-- Dropdown Content -->
         <div class="dropdown-menu account-dropdown" aria-labelledby="accountDropdown">
           <div class="p-3 border-bottom text-center">
-            <button class="btn btn-warning w-100">Sign in</button>
-            <p class="small mt-2 mb-0">New customer? <a href="#" class="text-primary">Start here.</a></p>
+            <a routerLink="/login"><button class="btn btn-warning w-100">Sign in</button></a>
+            
+            <p class="small mt-2 mb-0">New customer? <a routerLink="/register" class="text-primary">Start here.</a></p>
           </div>
           <div class="row p-3">
             <!-- Your Lists -->
@@ -63,6 +72,7 @@
                 <li><a href="#">Baby Wishlist</a></li>
                 <li><a href="#">Discover Your Style</a></li>
                 <li><a href="#">Explore Showroom</a></li>
+                <li><a href="#" *ngIf="checkUser()" (click)="logoutUser()">Sign Out</a></li>
               </ul>
             </div>
 
@@ -80,6 +90,7 @@
                 <li><a href="#">Your Seller Account</a></li>
                 <li><a href="#">Manage Your Content and Devices</a></li>
                 <li><a href="#">Register for a Free Business Account</a></li>
+                
               </ul>
             </div>
           </div>

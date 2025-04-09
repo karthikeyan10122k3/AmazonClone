@@ -17,7 +17,7 @@
           <p class="card-text mt-2">
             <span class="fw-bold">{{ product.price | currency:'INR' }}</span>
             <small>
-              M.R.P: {{ (product.price / (1 - product.discountPercentage / 100)) | number:'1.2-2' | currency:'INR' }}
+              M.R.P: {{ product.price / (1 - product.discountPercentage / 100) | currency:'INR':'symbol':'1.2-2' }}
               ({{ product.discountPercentage }}% Off)
           </small>
           </p>
@@ -66,7 +66,7 @@
       <p class="card-text mt-2">
         <span class="fw-bold">{{ product.price | currency:'INR' }}</span>
         <small>
-          M.R.P: {{ (product.price / (1 - product.discountPercentage / 100)) | number:'1.2-2' | currency:'INR' }}
+          M.R.P: {{ product.price / (1 - product.discountPercentage / 100) | currency:'INR':'symbol':'1.2-2' }}
           ({{ product.discountPercentage }}% Off)
       </small>
       </p>

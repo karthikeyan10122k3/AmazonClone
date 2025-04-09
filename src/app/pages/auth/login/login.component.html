@@ -1,0 +1,39 @@
+
+<div class="container d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card shadow-sm p-4" style="width: 360px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+           class="mb-4 mx-auto d-block" style="height: 32px;" alt="Amazon Logo" />
+  
+        <h4 class="mb-3 text-center">Sign-In</h4>
+    
+        <form [formGroup]="loginForm" (ngSubmit)="submit()" class="my-1">
+            <div class="mb-3">
+            <label for="email" class="form-label">Email or mobile phone number</label>
+            <input id="email" type="email" formControlName="email" class="form-control">
+                <span class="text-danger" *ngIf="loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched">This is Required</span>
+                <span class="text-danger" *ngIf="loginForm.get('email')?.hasError('pattern') && loginForm.get('email')?.touched">Enter a valid email address.</span>
+            </div>
+    
+            <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" formControlName="password" class="form-control">
+                <span class="text-danger" *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched">This is Required</span>
+                
+            </div>
+    
+            <button type="submit" class="btn btn-warning w-100">Continue</button>
+        </form>
+
+        <p class="mt-1 small">By continuing, you agree to Amazon's 
+            <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.
+          </p>
+      
+          <hr>
+    
+        <div class="text-center">
+            <p class="mb-2 small">New to Amazon?</p>
+            <a routerLink="/register"><button class="btn btn-light border w-100">Create your Amazon account</button></a>
+        </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,65 @@
+<div class="container min-vh-100 d-flex justify-content-center bg-light">
+    <div class="d-flex flex-column justify-content-center py-4" style="width: 100%;">
+      <div class="card shadow-sm mx-auto p-4" style="width: 360px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+             class="mb-4 mx-auto d-block" style="height: 32px;" alt="Amazon Logo" />
+  
+        <h4 class="mb-3 text-center">Create account</h4>
+  
+        <form [formGroup]="signUpForm" (ngSubmit)="submit()" class="my-1">
+          <div class="mb-3">
+            <label for="fullName" class="form-label">Your name</label>
+            <input id="fullName" type="text" formControlName="fullName" class="form-control" placeholder="First and last name">
+            <span class="text-danger" *ngIf="signUpForm.get('fullName')?.hasError('required') && signUpForm.get('fullName')?.touched">
+                This is Required
+            </span>
+          </div>
+  
+          <div class="mb-3">
+            <label for="contact" class="form-label">Mobile number or email</label>
+            <input id="contact" type="text" formControlName="contact" class="form-control"  placeholder="Mobile number or email">
+            <span class="text-danger" *ngIf="signUpForm.get('contact')?.hasError('required') && signUpForm.get('contact')?.touched">
+                This is Required
+            </span>
+          </div>
+  
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" formControlName="password" class="form-control" placeholder="At least 6 characters">
+            <span class="text-danger" *ngIf="signUpForm.get('password')?.hasError('required') && signUpForm.get('password')?.touched">
+                This is Required
+            </span>
+          </div>
+  
+          <div class="mb-3">
+            <label for="confirmPassword" class="form-label">Re-enter password</label>
+            <input id="confirmPassword" type="password" formControlName="confirmPassword" class="form-control">
+            <span class="text-danger" *ngIf="signUpForm.get('confirmPassword')?.hasError('required') && signUpForm.get('confirmPassword')?.touched">
+                This is Required
+            </span>
+            <span class="text-danger" *ngIf="signUpForm.get('confirmPassword')?.hasError('mismatch') && signUpForm.get('confirmPassword')?.touched">
+                Passwords do not match
+            </span>
+              
+        </div>
+  
+          <button type="submit" class="btn btn-warning w-100">Continue</button>
+        </form>
+  
+        <p class="mt-1 small">
+          By creating an account, you agree to Amazon's
+          <a href="#">Conditions of Use</a> and <a href="#">Privacy Notice</a>.
+        </p>
+  
+        <hr>
+  
+        <div class="text-center">
+          <p class="mb-2 small">Already have an account?</p>
+          <a routerLink="/login">
+            <button class="btn btn-light border w-100">Sign in to your Amazon account</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  

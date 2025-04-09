@@ -38,27 +38,23 @@ export class ProductDisplayComponent {
   constructor() {}
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe(query => {
-      this.searchedProduct = query['search'] || ''; 
-      this.category = query['category'] || '';
-
-      if (!this.searchedProduct && this.category === "All") {  //No  Search Product and No Category!
-        this.route.navigate(['/home']);
-      }
-
-      this.productService.getProducts().subscribe(result => {
-        this.productList = result;
+    this.productService.getProducts().subscribe(result => {
+      this.productList = result;
+  
+      this.activatedRoute.queryParams.subscribe(query => {
+        this.searchedProduct = query['search'] || ''; 
+        this.category = query['category'] || '';
         this.getSearchedProducts(); 
       });
     });
   }
-
-
-
+  
 
   getSearchedProducts() {
-    
-    if(this.searchedProduct === "" && this.category !== "All"){ // No Search Product But There is Category!
+    if(this.searchedProduct === "" && this.category === "All"){ // Displaying All products for "All" Category
+      this.filteredProductList = this.productList;
+    }
+    else if(this.searchedProduct === "" && this.category !== "All"){ // No Search Product But There is Category!
       this.filteredProductList = this.productList.filter(product => 
         product.category.trim().toLowerCase() === this.category.trim().toLowerCase());
     }
