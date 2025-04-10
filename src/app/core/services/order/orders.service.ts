@@ -9,7 +9,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class OrdersService {
   private ordersSubject = new BehaviorSubject<{ productId: number, quantity: number }[]>([]);
 
-  constructor(private authService: AuthService, httpClient: HttpClient) {
+  constructor(private authService: AuthService,private http: HttpClient) {
     this.initializeOrders();
   }
 
@@ -34,7 +34,13 @@ export class OrdersService {
     user.orders = mergedOrders;
 
     this.ordersSubject.next(mergedOrders);
-    
 
+  this.http.put(`Add your url da venky`, user).subscribe({
+    next: () => console.log('Orders synced to backend'),
+    error: (err) => console.error('Failed to update orders:', err)
+  });
+
+  this.authService.setCurrentUser(user);
+    
   }
 }
