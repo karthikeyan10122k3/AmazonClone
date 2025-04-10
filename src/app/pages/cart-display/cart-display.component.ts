@@ -6,11 +6,12 @@ import { CartCardComponent } from "../../shared/components/cart-card/cart-card.c
 import { AuthService } from '../../core/services/auth/auth.service';
 import { ProductsService } from '../../core/services/product/products.service';
 import { OrdersService } from '../../core/services/order/orders.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cart-display',
-  imports: [NgFor, NgIf, CartCardComponent, CurrencyPipe],
-templateUrl: './cart-display.component.html',
+  imports: [NgFor, NgIf, CartCardComponent, CurrencyPipe, RouterLink],
+  templateUrl: './cart-display.component.html',
   styleUrls: ['./cart-display.component.css']
 })
 export class CartComponent implements OnInit {

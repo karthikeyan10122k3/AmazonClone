@@ -48,9 +48,13 @@
         <div class="row">
           <div class="col-sm-6 col-md-4 col-lg-3 mb-3" *ngFor="let product of orderedProducts">
             <div class="card h-100 shadow-sm">
-              <img [src]="product.thumbnail" class="card-img-top" [alt]="product.title" style="height: 150px; object-fit: cover;">
+              <a [routerLink]="['/product-details', product.id]">
+                <img [src]="product.thumbnail" class="card-img-top" [alt]="product.title" style="height: 150px; object-fit: cover;">
+              </a>
               <div class="card-body p-2">
-                <h6 class="card-title mb-1" style="font-size: 14px;">{{ product.title }}</h6>
+                <a [routerLink]="['/product-details', product.id]">
+                  <h6 class="card-title mb-1" style="font-size: 14px;">{{ product.title }}</h6>
+                </a>
                 <p class="mb-1" style="font-size: 13px;"><strong>Price:</strong> {{ product.price | currency:'INR' }}</p>
                 <p class="mb-0" style="font-size: 13px;"><strong>Quantity:</strong> {{ product.quantity }}</p>
               </div>

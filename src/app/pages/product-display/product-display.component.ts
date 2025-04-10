@@ -51,10 +51,10 @@ export class ProductDisplayComponent {
   
 
   getSearchedProducts() {
-    if(this.searchedProduct === "" && this.category === "All"){ // Displaying All products for "All" Category
-      this.filteredProductList = this.productList;
+    if(this.searchedProduct === "" && this.category === "All"){
+      this.route.navigate(["/home"]);
     }
-    else if(this.searchedProduct === "" && this.category !== "All"){ // No Search Product But There is Category!
+    if(this.searchedProduct === "" && this.category !== "All"){ // No Search Product But There is Category!
       this.filteredProductList = this.productList.filter(product => 
         product.category.trim().toLowerCase() === this.category.trim().toLowerCase());
     }

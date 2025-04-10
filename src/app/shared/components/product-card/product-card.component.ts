@@ -4,6 +4,7 @@ import { CommonModule, CurrencyPipe, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { ProductDescriptionShorteningPipe } from '../../../core/pipes/productDescriptionShortening/product-description-shortening.pipe';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-product-card',
@@ -38,7 +39,7 @@ export class ProductCardComponent {
   ]
   horizontalCardCategory = ["smartphones", "laptops","automotive", "motorcycle", "home-decoration", "furniture", "lighting"];
   
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private authService: AuthService) {}
 
   ngOnInit() {
     this.cartService.getCartItems().subscribe(prod => {
@@ -51,6 +52,11 @@ export class ProductCardComponent {
   }
 
   addItemToCart(product: Product){
+    const user = this.authService.getCurrentUser();
+    if (!user) {
+      alert("U need to Sign In to Add Items to cart!");
+      return;
+    };
     this.cartService.addItem(product)
   }
 
