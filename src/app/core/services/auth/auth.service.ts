@@ -7,8 +7,9 @@ import { User } from '../../models/user/user';
   providedIn: 'root'
 })
 export class AuthService {
-  private signUpUrl = 'add your signup api da venky'; 
-  private loginUrl = 'add your login api da venky'; 
+  private BASE_URL = 'https://your-backend-url.com/users'; // Replace this with your actual base URL
+  private SIGNUP_URL = `${this.BASE_URL}/register`;
+  private LOGIN_URL = `${this.BASE_URL}/login`;
 
   private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
   currentUser$ = this.currentUserSubject.asObservable();
@@ -26,25 +27,23 @@ export class AuthService {
       orders: []
     };
 
-    return this.http.post<User>(this.signUpUrl, newUser).pipe(
+    return this.http.post<User>(this.SIGNUP_URL, newUser).pipe(
       tap(user => this.setUser(user))
     );
   }
 
   // Login
   login(contact: string, password: string): Observable<User> {
-    return this.http.post<User>(this.loginUrl, { contact, password }).pipe(
+    return this.http.post<User>(this.LOGIN_URL, { contact, password }).pipe(
       tap(user => this.setUser(user))
     );
   }
 
-  // Storing user in local storage 
   private setUser(user: User) {
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSubject.next(user);
   }
 
-  // Getting user from local storage
   private getUserFromStorage(): User | null {
     if (typeof window !== 'undefined' && window.localStorage) {
       const userData = localStorage.getItem('user');
@@ -52,13 +51,11 @@ export class AuthService {
     }
     return null;
   }
-  
-  // Getting the current user
+
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
   }
 
-  // updating the users Behaviour subject
   public setCurrentUser(user: User) {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.setItem('user', JSON.stringify(user));
@@ -66,7 +63,6 @@ export class AuthService {
     this.currentUserSubject.next(user);
   }
 
-  // Logout
   logout() {
     localStorage.removeItem('user');
     this.currentUserSubject.next(null);

@@ -7,9 +7,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class OrdersService {
+  private ORDERS_API = 'your url for Updating the orders'; //  Base url for Updating Users Orders List
   private ordersSubject = new BehaviorSubject<{ productId: number, quantity: number }[]>([]);
 
-  constructor(private authService: AuthService,private http: HttpClient) {
+  constructor(private authService: AuthService, private http: HttpClient) {
     this.initializeOrders();
   }
 
@@ -32,15 +33,15 @@ export class OrdersService {
 
     const mergedOrders = [...existingOrders, ...newOrders];
     user.orders = mergedOrders;
+    user.cart = [];
 
     this.ordersSubject.next(mergedOrders);
 
-  this.http.put(`Add your url da venky`, user).subscribe({
-    next: () => console.log('Orders synced to backend'),
-    error: (err) => console.error('Failed to update orders:', err)
-  });
+    this.http.put(`${this.ORDERS_API}${user.id}`, user).subscribe({
+      next: () => console.log('Orders synced to backend'),
+      error: (err) => console.error('Failed to update orders:', err)
+    });
 
-  this.authService.setCurrentUser(user);
-    
+    this.authService.setCurrentUser(user);
   }
 }

@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class ProductsService {
   private PRODUCT_API = 'https://dummyjson.com/products'; // change this to you api da venky but be sure to add the type same as the one in this api
+  private UPDATE_PRODUCT_API = "Add your product update URL/"; // Base url for Updating product List
   private products = new BehaviorSubject<Product[]>([]);
   private http = inject(HttpClient);
   private router = inject(Router);
@@ -55,11 +56,12 @@ export class ProductsService {
 
   syncProducts(updatedList: Product[]) {
     updatedList.forEach(product => {
-      this.http.put(`Add your product update URL/${product.id}`, product).subscribe({
+      this.http.put(`${this.UPDATE_PRODUCT_API}${product.id}`, product).subscribe({
         next: () => console.log(`Product ${product.id} stock updated`),
         error: (err) => console.error(`Error updating product ${product.id}:`, err)
       });
     });
   }
+  
   
 }

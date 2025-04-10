@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class CartService {
 
   private cartList: CartItem[] = [];
+  private USERS_API = 'your url for Updating the cart'; //  Base url for Updating Users Cart List
 
   cartBehaviourSubject = new BehaviorSubject<CartItem[]>(this.cartList);
   subtotalBehaviourSubject = new BehaviorSubject<number>(0);
@@ -24,7 +25,6 @@ export class CartService {
 
   addItem(product: any) {
     const index = this.cartList.findIndex(item => item.id === product.id);
-
     if (index > -1) {
       console.error("Item already in Cart");
       return;
@@ -51,7 +51,6 @@ export class CartService {
 
   removeItem(cartItem: any) {
     const index = this.cartList.findIndex(item => item.id === cartItem.id);
-
     if (index < 0) {
       console.error("Item Not in Cart");
       return;
@@ -82,7 +81,6 @@ export class CartService {
 
   increaseQuantity(cartItem: CartItem) {
     const item = this.cartList.find(prod => prod.id === cartItem.id);
-
     if (!item) {
       console.error("Item Not available to increase quantity");
       return;
@@ -101,7 +99,6 @@ export class CartService {
 
   decreaseQuantity(cartItem: CartItem) {
     const item = this.cartList.find(prod => prod.id === cartItem.id);
-
     if (!item || item.quantity <= 1) {
       console.warn("Minimum order limit reached, cannot decrease further.");
       return;
@@ -124,7 +121,7 @@ export class CartService {
 
   findItem(cartItem: Product): Boolean {
     const isItemPresent = this.cartList.find(prod => prod.id === cartItem.id);
-    return isItemPresent ? true : false;
+    return !!isItemPresent;
   }
 
   updateUserCart() {
@@ -138,7 +135,7 @@ export class CartService {
 
     this.authService.setCurrentUser(user);
 
-    this.http.put(`Add your url for updating user da venky`, user).subscribe({
+    this.http.put(`${this.USERS_API}${user.id}`, user).subscribe({
       next: () => console.log('User cart synced with backend'),
       error: (err) => console.error('Failed to update user on backend:', err)
     });
@@ -151,13 +148,11 @@ export class CartService {
     this.updateTotalItems();
     this.updateUserCart();
   }
-  
+
   syncUser(user: any) {
-    this.http.put('Add your url for updating user', user).subscribe({
+    this.http.put(`${this.USERS_API}${user.id}`, user).subscribe({
       next: () => console.log('User updated after purchase'),
       error: (err) => console.error('Failed to sync user after purchase:', err)
     });
   }
-  
-
 }
