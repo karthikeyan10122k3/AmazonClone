@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Product } from '../../../core/models/product/product';
 import { CommonModule, CurrencyPipe, NgIf } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { ProductDescriptionShorteningPipe } from '../../../core/pipes/productDescriptionShortening/product-description-shortening.pipe';
 import { AuthService } from '../../../core/services/auth/auth.service';
@@ -15,6 +15,9 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 export class ProductCardComponent {
   @Input() product!: Product;
   isInCart: boolean = false;
+  showLoginModal: boolean = false;
+  pendingProductToAdd: Product | null = null;
+
   category = [
     "smartphones",
     "laptops",
@@ -39,7 +42,9 @@ export class ProductCardComponent {
   ]
   horizontalCardCategory = ["smartphones", "laptops","automotive", "motorcycle", "home-decoration", "furniture", "lighting"];
   
-  constructor(private cartService: CartService, private authService: AuthService) {}
+  constructor(private cartService: CartService, 
+              private authService: AuthService, 
+              private route: Router) {}
 
   ngOnInit() {
     this.cartService.getCartItems().subscribe(prod => {
@@ -51,18 +56,34 @@ export class ProductCardComponent {
     return this.horizontalCardCategory.includes(category);
   }
 
-  addItemToCart(product: Product){
+  openLoginModal(product: Product) {
+    this.pendingProductToAdd = product;
+    this.showLoginModal = true;
+  }
+  
+  closeLoginModal() {
+    this.showLoginModal = false;
+    this.pendingProductToAdd = null;
+  }
+  
+  proceedToLogin() {
+    this.showLoginModal = false;
+    this.route.navigate(['/login']);
+  }
+
+  addItemToCart(product: Product) {
     const user = this.authService.getCurrentUser();
     if (!user) {
-      alert("U need to Sign In to Add Items to cart!");
+      this.openLoginModal(product);
       return;
-    };
-    this.cartService.addItem(product)
+    }
+  
+    this.cartService.addItem(product);
   }
+  
 
   removeItemFromCart(product: Product){
     this.cartService.removeItem(product)
   }
-
 
 }
