@@ -65,15 +65,6 @@ export class CartComponent implements OnInit {
     const user = this.authService.getUser();
     if (!user) return;
     
-    this.productService.getProducts().subscribe(productList => {
-      this.cartItems.forEach(cartItem => {
-        const product = productList.find(prod => prod.id === cartItem.product.id);
-        if (product) {
-          product.stock -= cartItem.quantity;
-          if (product.stock < 0) product.stock = 0; 
-        }
-      });
-
       const ordersToAdd = this.cartItems.map(item => ({
         product: item.product,
         quantity: item.quantity
@@ -84,9 +75,8 @@ export class CartComponent implements OnInit {
       this.cartItems = [];
       this.cartService.clearCart();
 
-      this.productService.syncProducts(productList);
+      // this.productService.syncProducts(productList);
  
-    });
   }
 
   buyAgain(buyingProduct : any) {

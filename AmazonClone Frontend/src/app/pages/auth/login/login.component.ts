@@ -29,7 +29,7 @@ submit() {
 
     this.authService.login(email, password).subscribe({
       next: (res) => {
-        console.log('Login Success:', res);
+        // console.log('Login Success:', res);
         this.router.navigate(['/cart']);
       },
       error: (err) => {

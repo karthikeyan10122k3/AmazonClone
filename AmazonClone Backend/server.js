@@ -5,8 +5,6 @@ import cors from 'cors';
 import productRoute from './routes/product.route.js'
 import userRoute from './routes/user.route.js'
 import authRoute from './routes/auth.route.js'
-import cartRoute from './routes/cart.route.js'
-import ordersRoute from './routes/orders.route.js'
 
 const app = express();
 app.use(express.json())
@@ -33,5 +31,3 @@ mongoose.connect(MONGODB_CONNECTION_STRING)
     app.use('/api/product',productRoute)
     app.use('/api/user',userRoute)
     app.use('/api/auth',authRoute)
-    app.use('/api/user/cart',cartRoute)
-    app.use('/api/user/orders',ordersRoute)
