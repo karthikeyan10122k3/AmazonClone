@@ -6,6 +6,7 @@ import { CartService } from '../../../core/services/cart/cart.service';
 import { ProductDescriptionShorteningPipe } from '../../../core/pipes/productDescriptionShortening/product-description-shortening.pipe';
 import { AuthService } from '../../../core/services/auth/auth.service';
 
+
 @Component({
   selector: 'app-product-card',
   imports: [CommonModule, NgIf, CurrencyPipe, RouterLink, ProductDescriptionShorteningPipe],
@@ -42,14 +43,18 @@ export class ProductCardComponent {
   ]
   horizontalCardCategory = ["smartphones", "laptops","automotive", "motorcycle", "home-decoration", "furniture", "lighting"];
   
-  constructor(private cartService: CartService, 
+  constructor(
+    private cartService: CartService, 
               private authService: AuthService, 
               private route: Router) {}
 
   ngOnInit() {
     this.cartService.getCartItems().subscribe(prod => {
-      this.isInCart = prod.some(item => item.id === this.product.id);
+      this.isInCart = prod.some(item => item.product.id === this.product.id);
     });
+    // console.log(this.product);
+    
+    
   }
   
   isHorizontalCardCategory(category: string): boolean {
@@ -72,18 +77,21 @@ export class ProductCardComponent {
   }
 
   addItemToCart(product: Product) {
-    const user = this.authService.getCurrentUser();
+    const user = this.authService.getUser();
     if (!user) {
       this.openLoginModal(product);
       return;
     }
+    // console.log(product);
+    
   
     this.cartService.addItem(product);
   }
   
 
-  removeItemFromCart(product: Product){
-    this.cartService.removeItem(product)
+  deleteItem(product: any) {
+    this.cartService.removeItem(product);
+    this.cartService.updateSubtotal();
   }
 
 }

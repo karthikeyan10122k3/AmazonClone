@@ -2,65 +2,76 @@ import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../../models/product/product';
-import { tap, take, filter, switchMap } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
-  private PRODUCT_API = 'https://dummyjson.com/products'; // change this to you api da venky but be sure to add the type same as the one in this api
-  private UPDATE_PRODUCT_API = "Add your product update URL/"; // Base url for Updating product List
-  private products = new BehaviorSubject<Product[]>([]);
+  private BASE_URL = 'http://localhost:8080/api/product';
+  private productBehaviourSubject = new BehaviorSubject<Product[]>([]);
   private http = inject(HttpClient);
-  private router = inject(Router);
+  private productList: Product[] = [{
+    id: '',
+    title: '',
+    description: '',
+    category: '',
+    price: 0,
+    rating: 0,
+    stock: 0,
+    warrantyInformation: '',
+    shippingInformation: '',
+    availabilityStatus: '',
+    returnPolicy: '',
+    minimumOrderQuantity: 0,
+    thumbnail: ''
+  }]
 
   constructor() {
     this. fetchProducts()
   }
 
   fetchProducts(): void {
-    if(this.products.getValue().length === 0){
-      this.http.get<{ products: Product[] }>(this.PRODUCT_API)
-        .subscribe({
-          next: (result) => {
-            this.products.next(result.products); 
-          },
-          error: (error) => {
-            console.error("Error fetching products:", error); 
-          }
-        });
+    if (this.productBehaviourSubject.getValue().length === 0) {
+      this.http.get<{ products: any[] }>(this.BASE_URL).subscribe({
+        next: (result) => {
+          this.productList = result.products.map(product => {
+            const { _id, ...rest } = product;
+            return { ...rest, id: _id };
+          });
+  
+          this.productBehaviourSubject.next([...this.productList]);
+        },
+        error: (error) => {
+          console.error("Error fetching products:", error);
+        }
+      });
     }
   }
+  
 
 
   getProducts() {
-    return this.products.asObservable()
+    return this.productBehaviourSubject.asObservable()
   }
+  
 
-  getSingleProduct(productId: number): Observable<Product | undefined> {
-    return this.getProducts().pipe(
-      filter(products => products.length > 0),
-      take(1),
-      switchMap(products => {
-        const singleProduct = products.find(prod => prod.id === productId);
-        if (!singleProduct) {
-          console.warn(`Product with Id ${productId} not available`);
-          this.router.navigate(["/home"]);
-          return of(undefined);
-        }
-        return of(singleProduct);
-      })
-    );
+  getSingleProduct(productId: string): Observable<Product> {
+    return this.http.get<{ message: string, product: any }>(`${this.BASE_URL}/${productId}`)
+      .pipe(
+        map(response => {
+          const product = response.product;
+          const { _id, ...rest } = product;
+          const productObject =  { ...rest, id: _id };
+          
+          return productObject as Product;
+        })
+      );
   }
-
+  
   syncProducts(updatedList: Product[]) {
-    updatedList.forEach(product => {
-      this.http.put(`${this.UPDATE_PRODUCT_API}${product.id}`, product).subscribe({
-        next: () => console.log(`Product ${product.id} stock updated`),
-        error: (err) => console.error(`Error updating product ${product.id}:`, err)
-      });
-    });
+    // console.log(updatedList);
+    
   }
   
   

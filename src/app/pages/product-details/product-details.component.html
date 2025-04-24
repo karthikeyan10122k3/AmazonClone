@@ -15,7 +15,7 @@
         
         <h4 class="text-success">
           {{ product.price | currency }}
-          <small class="text-danger">(-{{ product.discountPercentage }}%)</small>
+          <small class="text-danger" *ngIf="product.discountPercentage ">(-{{ product.discountPercentage }}%)</small>
         </h4>
         
         <p [ngClass]="{'text-danger': product.availabilityStatus === 'Low Stock', 'text-success': product.availabilityStatus !== 'Low Stock'}">
@@ -29,20 +29,36 @@
   
         <p>{{ product.description }}</p>
         <p><strong>Weight:</strong> {{ product.weight }}g</p>
-        <p><strong>Dimensions:</strong> {{ product.dimensions.width }} x {{ product.dimensions.height }} x {{ product.dimensions.depth }} cm</p>
+        <p><strong>Dimensions:</strong> {{ product.dimensions?.width }} x {{ product.dimensions?.height }} x {{ product.dimensions?.depth }} cm</p>
         <p><strong>Warranty:</strong> {{ product.warrantyInformation }}</p>
         <p><strong>Shipping:</strong> {{ product.shippingInformation }}</p>
         <p><strong>Return Policy:</strong> {{ product.returnPolicy }}</p>
         <p><strong>Minimum Order Quantity:</strong> {{ product.minimumOrderQuantity }}</p>
   
-        <p><strong>Barcode:</strong> {{ product.meta.barcode }}</p>
-        <p><strong>QR Code:</strong> <img [src]="product.meta.qrCode" alt="QR Code" width="100"></p>
+        <p><strong>Barcode:</strong> {{ product.meta?.barcode }}</p>
+        <p><strong>QR Code:</strong> <img [src]="product.meta?.qrCode" alt="QR Code" width="100"></p>
   
-        <button class="btn btn-warning btn-lg me-2">Buy Now</button>
-        <button class="btn btn-primary btn-lg">Add to Cart</button>
+        <div class="d-flex">
+          <ng-container *ngIf="!isInCart; else inCartTemplate">
+            <div class="me-2">
+              <button class="btn btn-primary btn-lg" (click)="addItemToCart()">Add to Cart</button>
+            </div>
+          </ng-container>
+        
+          <ng-template #inCartTemplate>
+            <div class="me-2">
+              <button class="btn btn-danger btn-lg" (click)="removeItemFromCart()">Remove from Cart</button>
+            </div>
+          </ng-template>
+        
+          <div class="me-2">
+            <button class="btn btn-warning btn-lg" (click)="proceedToBuy()">Buy Now</button>
+          </div>
+        </div>
+        
       </div>
     </div>
-  
+
     <!-- Reviews Section -->
     <div class="mt-4">
       <h3>Customer Reviews</h3>

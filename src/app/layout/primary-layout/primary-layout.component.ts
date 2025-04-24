@@ -17,6 +17,8 @@ export class PrimaryLayoutComponent implements OnInit {
   category!: string ; 
   searchInput!: string ;
   username: string | undefined = '';
+  currentYear: number = new Date().getFullYear();
+
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe(query=>{
@@ -77,7 +79,7 @@ export class PrimaryLayoutComponent implements OnInit {
   }
 
   checkUser() {
-    const currentUser = this.authService.getCurrentUser();
+    const currentUser = this.authService.getUser();
     if(currentUser !== null){
       this.username = currentUser?.fullName
       return true;

@@ -1,17 +1,20 @@
+import { CartItem } from "../cart/cart-item";
+import { Product } from "../product/product";
+
 export interface User {
-    id?: number;
+    id?: string;
     fullName: string;
-    email: string;
+    email?: string;
     mobile: string;
-    password: string;
+    password?: string;
   
     cart?: {
-      productId: number;
+      product: CartItem;
       quantity: number;
     }[];
   
     orders?: {
-      productId: number;
+      product: CartItem;
       quantity: number;
     }[];
   }

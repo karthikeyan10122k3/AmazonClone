@@ -1,10 +1,7 @@
-
-export interface CartItem {
-    
-        id: number;
+interface Item {
+        id: string;
         title: string;
         description: string;
-        quantity: number;
         price: number;
         stock: number;
         discountPercentage: number;
@@ -12,5 +9,10 @@ export interface CartItem {
         availabilityStatus: string;
         minimumOrderQuantity: number;
         thumbnail: string;
-      
 }
+
+export interface CartItem {
+        product: Item;
+        quantity: number;
+}
+      

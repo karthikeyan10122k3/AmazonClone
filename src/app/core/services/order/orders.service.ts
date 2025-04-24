@@ -2,46 +2,105 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Orders } from '../../models/order-item/orders';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class OrdersService {
-  private ORDERS_API = 'your url for Updating the orders'; //  Base url for Updating Users Orders List
-  private ordersSubject = new BehaviorSubject<{ productId: number, quantity: number }[]>([]);
+  private BASE_URL = 'http://localhost:8080/api/user';
+  private ordersBehaviorSubject = new BehaviorSubject<Orders[]>([]);
+  private ordersList: Orders[] = [{
+    product: {
+      id: "",
+      title: "",
+      description: "",
+      price: 0,
+      stock: 0,
+      discountPercentage: 0,
+      rating: 0,
+      availabilityStatus: "",
+      minimumOrderQuantity: 0,
+      thumbnail: "",
+    },
+    quantity: 0
+  }]
 
   constructor(private authService: AuthService, private http: HttpClient) {
-    this.initializeOrders();
+    this.getUserOrdersFromDB();
   }
 
-  private initializeOrders(): void {
-    const user = this.authService.getCurrentUser();
-    if (user && user.orders) {
-      this.ordersSubject.next(user.orders);
+  addOrderItems(buyProducts: Orders[]) {
+  
+    buyProducts.forEach(newItem => {
+      const index = this.ordersList.findIndex(
+        existingItem => existingItem.product.id === newItem.product.id
+      );
+  
+      if (index > -1) {
+        this.ordersList[index].quantity += newItem.quantity;
+      } else {
+        this.ordersList.push({ ...newItem });
+      }
+    });
+  
+    this.updateUserOrders();
+  }
+
+  addSingleOrderItem(buyingProduct: Orders) {
+    const index = this.ordersList.findIndex(item => item.product.id === buyingProduct.product.id);
+    
+
+    if (index > -1) {
+      this.ordersList[index].quantity += buyingProduct.quantity;
+    } else {
+      this.ordersList.push({ ...buyingProduct });
     }
+
+    this.updateUserOrders();
   }
+  
 
-  getOrders(): Observable<{ productId: number, quantity: number }[]> {
-    return this.ordersSubject.asObservable();
-  }
+  getUserOrdersFromDB() {
+    const user = this.authService.getUser();
+    if (!user) return [];
 
-  updateOrders(newOrders: { productId: number, quantity: number }[]): void {
-    const user = this.authService.getCurrentUser();
-    if (!user) return;
-
-    const existingOrders = user.orders || [];
-
-    const mergedOrders = [...existingOrders, ...newOrders];
-    user.orders = mergedOrders;
-    user.cart = [];
-
-    this.ordersSubject.next(mergedOrders);
-
-    this.http.put(`${this.ORDERS_API}${user.id}`, user).subscribe({
-      next: () => console.log('Orders synced to backend'),
-      error: (err) => console.error('Failed to update orders:', err)
+    this.http.get<any>(`${this.BASE_URL}/orders?contact=${user.contact}`).subscribe({
+      next: (response) => {
+        this.ordersList = response.orders;
+      
+        this.ordersBehaviorSubject.next([...this.ordersList]);
+      },
+      error: (err) => console.error('Failed to retrieve user cart:', err)
     });
 
-    this.authService.setCurrentUser(user);
+    return this.ordersList; 
   }
+
+  getOrderItems(): Observable<Orders[]> {
+    return this.ordersBehaviorSubject.asObservable();
+  }
+
+  updateUserOrders() {
+    const user = this.authService.getUser();
+    if (!user) return;
+
+    const updatedOrdersPayload = {
+      contact: user.contact,
+      orders: this.ordersList
+    };
+  
+    this.http.put(`${this.BASE_URL}/update-orders`, updatedOrdersPayload)
+    .subscribe({
+      next: () => {
+        console.log('User Orders synced with backend')
+        this.ordersBehaviorSubject.next([...this.ordersList]);
+      
+      },
+      error: (err) => console.error('Failed to update user on backend:', err)
+    });
+
+  }
+  
 }

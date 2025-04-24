@@ -22,14 +22,14 @@
           <h5>Order Summary</h5>
         </div>
         <div class="card-body">
-          <p class="text-success" *ngIf="cartItems.length > 0">
+          <p class="text-success" *ngIf="cartLength > 0">
             <i class="fa-solid fa-check"></i> Your order is eligible for FREE Delivery.
           </p>
-          <p class="text-danger" *ngIf="cartItems.length === 0">
+          <p class="text-danger" *ngIf="cartLength === 0">
             <i class="fa-solid fa-xmark"></i> Cart is Empty.
           </p>
-          <p>Subtotal ({{ cartItems.length }} items): <strong>{{ subtotal | currency:'INR' }}</strong></p>
-          <button class="btn btn-warning w-100" (click)="proceedToBuy()" [disabled]="cartItems.length === 0">Proceed to Buy</button>
+          <p>Subtotal ({{ cartLength }} items): <strong>{{ subtotal | currency:'INR' }}</strong></p>
+          <button class="btn btn-warning w-100" (click)="proceedToBuy()" [disabled]="cartLength === 0">Proceed to Buy</button>
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@
 
 
 <!-- Ordered Products Section -->
-<div class="row mt-4" *ngIf="orders.length > 0">
+<div class="row mt-4" *ngIf="ordersLength > 0">
   <div class="col-12">
     <div class="card">
       <div class="card-header bg-light py-2">
@@ -46,17 +46,17 @@
       </div>
       <div class="card-body py-2">
         <div class="row">
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-3" *ngFor="let product of orderedProducts">
+          <div class="col-sm-6 col-md-4 col-lg-3 mb-3" *ngFor="let orderItem of orderItems">
             <div class="card h-100 shadow-sm">
-              <a [routerLink]="['/product-details', product.id]">
-                <img [src]="product.thumbnail" class="card-img-top" [alt]="product.title" style="height: 150px; object-fit: cover;">
+              <a [routerLink]="['/product-details', orderItem.product.id]">
+                <img [src]="orderItem.product.thumbnail" class="card-img-top" [alt]="orderItem.product.title" style="height: 150px; object-fit: cover;">
               </a>
               <div class="card-body p-2">
-                <a [routerLink]="['/product-details', product.id]">
-                  <h6 class="card-title mb-1" style="font-size: 14px;">{{ product.title }}</h6>
+                <a [routerLink]="['/product-details', orderItem.product.id]">
+                  <h6 class="card-title mb-1" style="font-size: 14px;">{{ orderItem.product.title }}</h6>
                 </a>
-                <p class="mb-1" style="font-size: 13px;"><strong>Price:</strong> {{ product.price | currency:'INR' }}</p>
-                <p class="mb-0" style="font-size: 13px;"><strong>Quantity:</strong> {{ product.quantity }}</p>
+                <p class="mb-1" style="font-size: 13px;"><strong>Price:</strong> {{ orderItem.product.price| currency:'INR' }}</p>
+                <p class="mb-0" style="font-size: 13px;"><strong>Quantity:</strong> {{ orderItem.quantity }}</p>
               </div>
             </div>
           </div>

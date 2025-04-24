@@ -10,54 +10,72 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CartService {
 
-  private cartList: CartItem[] = [];
-  private USERS_API = 'your url for Updating the cart'; //  Base url for Updating Users Cart List
+  private cartList: CartItem[] = [{
+    product: {
+      id: "",
+      title: "",
+      description: "",
+      price: 0,
+      stock: 0,
+      discountPercentage: 0,
+      rating: 0,
+      availabilityStatus: "",
+      minimumOrderQuantity: 0,
+      thumbnail: "",
+},
+    quantity: 0
+  }];
 
-  cartBehaviourSubject = new BehaviorSubject<CartItem[]>(this.cartList);
+  private BASE_URL = 'http://localhost:8080/api/user';
+
+  cartBehaviourSubject = new BehaviorSubject<CartItem[]>([]);
   subtotalBehaviourSubject = new BehaviorSubject<number>(0);
   totalItemsSubject = new BehaviorSubject<number>(this.getTotalItems());
 
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(private authService: AuthService, private http: HttpClient) {
+    this.getUserCartFromDB(); 
+  }
 
   getCartItems(): Observable<CartItem[]> {
     return this.cartBehaviourSubject.asObservable();
   }
 
   addItem(product: any) {
-    const index = this.cartList.findIndex(item => item.id === product.id);
+    const index = this.cartList.findIndex(item => item.product.id === product.id);
+
     if (index > -1) {
-      console.error("Item already in Cart");
+      // console.error("Item already in Cart");
       return;
     }
-
+    
     const cartProduct: CartItem = {
-      id: product.id,
-      title: product.title,
-      description: product.description,
-      stock: product.stock,
-      quantity: 1,
-      price: product.price,
-      discountPercentage: product.discountPercentage,
-      rating: product.rating,
-      availabilityStatus: product.availabilityStatus,
-      minimumOrderQuantity: product.minimumOrderQuantity,
-      thumbnail: product.thumbnail
+      product: {
+        id: product.id,
+        title: product.title,
+        description: product.description,
+        stock: product.stock,
+        price: product.price,
+        discountPercentage: product.discountPercentage,
+        rating: product.rating,
+        availabilityStatus: product.availabilityStatus,
+        minimumOrderQuantity: product.minimumOrderQuantity,
+        thumbnail: product.thumbnail
+      },
+      quantity: 1
     };
-
     this.cartList.push(cartProduct);
-    this.cartBehaviourSubject.next([...this.cartList]);
     this.updateUserCart();
   }
 
   removeItem(cartItem: any) {
-    const index = this.cartList.findIndex(item => item.id === cartItem.id);
+    const index = this.cartList.findIndex(item => item.product.id === cartItem.id);
     if (index < 0) {
-      console.error("Item Not in Cart");
+      // console.error("Item Not in Cart");
       return;
     }
+    
 
     this.cartList.splice(index, 1);
-    this.cartBehaviourSubject.next([...this.cartList]);
     this.updateUserCart();
   }
 
@@ -74,38 +92,36 @@ export class CartService {
   }
 
   calculateTotalPrice(): number {
-    return this.cartBehaviourSubject.getValue().reduce((total, product) => {
-      return total + (product.price * (product.quantity || 1));
+    return this.cartBehaviourSubject.getValue().reduce((total, item) => {
+      return total + (item.product.price * (item.quantity || 1));
     }, 0);
   }
 
   increaseQuantity(cartItem: CartItem) {
-    const item = this.cartList.find(prod => prod.id === cartItem.id);
+    const item = this.cartList.find(item => item.product.id=== cartItem.product.id);
     if (!item) {
-      console.error("Item Not available to increase quantity");
+      // console.error("Item Not available to increase quantity");
       return;
     }
 
-    if (item.quantity >= item.stock || item.quantity >= item.minimumOrderQuantity) {
-      console.warn("Limit reached, cannot increase further.");
+    if (item.quantity >= item.product.stock || item.quantity >= item.product.minimumOrderQuantity) {
+      // console.warn("Limit reached, cannot increase further.");
       return;
     }
 
     item.quantity = (item.quantity || 1) + 1;
-    this.cartBehaviourSubject.next([...this.cartList]);
     this.updateSubtotal();
     this.updateUserCart();
   }
 
   decreaseQuantity(cartItem: CartItem) {
-    const item = this.cartList.find(prod => prod.id === cartItem.id);
+    const item = this.cartList.find(prod => prod.product.id === cartItem.product.id);
     if (!item || item.quantity <= 1) {
-      console.warn("Minimum order limit reached, cannot decrease further.");
+      // console.warn("Minimum order limit reached, cannot decrease further.");
       return;
     }
 
     item.quantity--;
-    this.cartBehaviourSubject.next([...this.cartList]);
     this.updateSubtotal();
     this.updateUserCart();
   }
@@ -120,26 +136,50 @@ export class CartService {
   }
 
   findItem(cartItem: Product): Boolean {
-    const isItemPresent = this.cartList.find(prod => prod.id === cartItem.id);
+    const isItemPresent = this.cartList.find(prod => prod.product.id === cartItem.id);
     return !!isItemPresent;
   }
 
   updateUserCart() {
-    const user = this.authService.getCurrentUser();
+    const user = this.authService.getUser();
+    
     if (!user) return;
+  const updatedCartPayload = {
+    contact: user.contact,
+    cart: this.cartList
+    };
+    
+    this.http.put(`${this.BASE_URL}/update-cart`, updatedCartPayload)
+    .subscribe({
+      next: () =>{ 
+        // console.log('User cart synced with backend')
+        this.cartBehaviourSubject.next([...this.cartList]);
 
-    user.cart = this.cartList.map(item => ({
-      productId: item.id,
-      quantity: item.quantity
-    }));
-
-    this.authService.setCurrentUser(user);
-
-    this.http.put(`${this.USERS_API}${user.id}`, user).subscribe({
-      next: () => console.log('User cart synced with backend'),
+      },
       error: (err) => console.error('Failed to update user on backend:', err)
     });
+
   }
+
+  getUserCartFromDB() {
+    const user = this.authService.getUser();
+    if (!user) return [];
+
+    this.http.get<any>(`${this.BASE_URL}/cart?contact=${user.contact}`)
+    .subscribe({
+      next: (response) => {
+        // console.log('User cart retrieved from backend:', response);
+        this.cartList = response.cart;
+      
+        this.cartBehaviourSubject.next([...this.cartList]);
+      },
+      error: (err) => console.error('Failed to retrieve user cart:', err)
+    });
+
+    return this.cartList; 
+  }
+
+
 
   clearCart() {
     this.cartList = [];
@@ -147,12 +187,5 @@ export class CartService {
     this.updateSubtotal();
     this.updateTotalItems();
     this.updateUserCart();
-  }
-
-  syncUser(user: any) {
-    this.http.put(`${this.USERS_API}${user.id}`, user).subscribe({
-      next: () => console.log('User updated after purchase'),
-      error: (err) => console.error('Failed to sync user after purchase:', err)
-    });
   }
 }

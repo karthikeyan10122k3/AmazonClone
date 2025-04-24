@@ -47,6 +47,7 @@ export class ProductDisplayComponent {
         this.getSearchedProducts(); 
       });
     });
+    
   }
   
 

@@ -27,7 +27,7 @@ export class RegistrationComponent {
   submit() {
     const password = this.signUpForm.get('password')?.value;
     const confirmPassword = this.signUpForm.get('confirmPassword')?.value;
-
+    
     if (this.signUpForm.valid && password === confirmPassword) {
       this.authService.signUp(this.signUpForm.value).subscribe({
         next: () => {

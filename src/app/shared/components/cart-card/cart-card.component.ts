@@ -11,11 +11,14 @@ import { Product } from '../../../core/models/product/product';
   templateUrl: './cart-card.component.html',
   styleUrl: './cart-card.component.css'
 })
-export class CartCardComponent {
+export class CartCardComponent  {
   @Input() cartItem!: CartItem;
 
   constructor(private cartService: CartService){
 
+  }
+  ngOnInit() {
+    // console.log('Cart Item:', this.cartItem);
   }
 
   increaseQuantity(product: CartItem) {

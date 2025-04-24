@@ -7,6 +7,7 @@ import { AuthService } from '../../core/services/auth/auth.service';
 import { ProductsService } from '../../core/services/product/products.service';
 import { OrdersService } from '../../core/services/order/orders.service';
 import { RouterLink } from '@angular/router';
+import { Orders } from '../../core/models/order-item/orders';
 
 @Component({
   selector: 'app-cart-display',
@@ -17,24 +18,33 @@ import { RouterLink } from '@angular/router';
 export class CartComponent implements OnInit {
 
   cartItems!: CartItem[];
+  cartLength: number = 0;
   subtotal!: number;
   totalCartItems!: number;
-  orders!: { productId: number; quantity: number }[];
-  orderedProducts!: any[];
-
-
+  orders!: { productId: string; quantity: number }[];
+  orderItems!: Orders[];
+  ordersLength: number = 0;
 
   constructor(private cartService: CartService, 
     private authService: AuthService, 
     private productService: ProductsService,
     private ordersService: OrdersService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.cartService.getCartItems().subscribe(result => {
+      
       this.cartItems = result;
+      
+      this.cartLength = this.cartItems.length;
       this.cartService.updateSubtotal();
+    });
+    
+    this.ordersService.getOrderItems().subscribe(result => {
+      
+      this.orderItems = result;
+      
+      this.ordersLength = this.orderItems.length;
     });
   
     this.cartService.getSubtotal().subscribe(subtotal => {
@@ -45,34 +55,6 @@ export class CartComponent implements OnInit {
       this.totalCartItems = total;
     });
 
-    this.productService.getProducts().subscribe(productList => {
-      this.ordersService.getOrders().subscribe(orderList => {
-        this.orders = orderList;
-    
-        const productMap = new Map<number, any>();
-    
-        orderList.forEach(order => {
-          const product = productList.find(p => p.id === order.productId);
-          if (product) {
-            if (productMap.has(order.productId)) {
-              // If product already exists, increase the quantity
-              const existing = productMap.get(order.productId);
-              existing.quantity += order.quantity;
-            } else {
-              // Clone product with quantity
-              productMap.set(order.productId, {
-                ...product,
-                quantity: order.quantity
-              });
-            }
-          }
-        });
-    
-        // Final ordered products list
-        this.orderedProducts = Array.from(productMap.values());
-      });
-    });
-    
   }
 
 
@@ -80,13 +62,13 @@ export class CartComponent implements OnInit {
     const confirmBuy = confirm("Are you sure you want to buy the products mentioned in the cart?");
     if (!confirmBuy) return;
 
-    const user = this.authService.getCurrentUser();
+    const user = this.authService.getUser();
     if (!user) return;
     
     // Update product stock
     this.productService.getProducts().subscribe(productList => {
       this.cartItems.forEach(cartItem => {
-        const product = productList.find(prod => prod.id === cartItem.id);
+        const product = productList.find(prod => prod.id === cartItem.product.id);
         if (product) {
           product.stock -= cartItem.quantity;
           if (product.stock < 0) product.stock = 0; 
@@ -97,27 +79,23 @@ export class CartComponent implements OnInit {
       user.orders = [
         ...(user.orders || []), 
         ...this.cartItems.map(item => ({
-          productId: item.id,
+          product: item.product,
           quantity: item.quantity
         }))
       ];
 
       const ordersToAdd = this.cartItems.map(item => ({
-        productId: item.id,
+        product: item.product,
         quantity: item.quantity
       }));
-      
-      this.ordersService.updateOrders(ordersToAdd);
+
+      this.ordersService.addOrderItems(ordersToAdd);
       // Clear cart
       this.cartItems = [];
       this.cartService.clearCart();
-      this.authService.setCurrentUser(user);
 
-      // Backend sync for user and products
-      this.cartService.syncUser(user);
       this.productService.syncProducts(productList);
-
-      
+ 
     });
   }
 }

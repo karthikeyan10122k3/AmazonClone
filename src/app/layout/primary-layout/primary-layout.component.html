@@ -43,24 +43,28 @@
     <div class="d-flex align-items-center">
       <!-- Account Dropdown -->
       <div class="dropdown mx-3">
-        <a class="nav-link text-light dropdown-toggle" 
-        id="accountDropdown" 
-        role="button" 
-        data-bs-toggle="dropdown" 
-        *ngIf="!checkUser()">
+        <ng-container *ngIf="!checkUser(); else userNameTemplate">
+          <a class="nav-link text-light dropdown-toggle" 
+          id="accountDropdown" 
+          role="button" 
+          data-bs-toggle="dropdown" 
+          >
           Hello, Sign in<br><strong>Account & Lists</strong>
         </a>
-        <a class="nav-link text-light dropdown-toggle" id="accountDropdown" role="button" data-bs-toggle="dropdown"
-        *ngIf="checkUser()">
-          Hello, {{username}}<br><strong>Account & Lists</strong>
-        </a>
+      </ng-container>
+      <ng-template #userNameTemplate>
+        <a class="nav-link text-light dropdown-toggle" id="accountDropdown" role="button" data-bs-toggle="dropdown">
+        Hello, {{username}}<br><strong>Account & Lists</strong>
+      </a>
+    </ng-template>
 
         <!-- Dropdown Content -->
         <div class="dropdown-menu account-dropdown" aria-labelledby="accountDropdown">
           <div class="p-3 border-bottom text-center">
-            <a routerLink="/login"><button class="btn btn-warning w-100">Sign in</button></a>
-            
-            <p class="small mt-2 mb-0">New customer? <a routerLink="/register" class="text-primary">Start here.</a></p>
+            <ng-container *ngIf="!checkUser()">
+              <a routerLink="/login"><button class="btn btn-warning w-100">Sign in</button></a>
+              <p class="small mt-2 mb-0">New customer? <a routerLink="/register" class="text-primary">Start here.</a></p>
+            </ng-container>
           </div>
           <div class="row p-3">
             <!-- Your Lists -->
@@ -184,6 +188,7 @@
   <hr class="bg-light" />
 
   <div class="text-center">
-    <p>&copy; 2025, AmazonClone.com, Inc.</p>
+    <p>&copy; {{ currentYear }}, AmazonClone.com, Inc.</p>
+
   </div>
 </footer>
