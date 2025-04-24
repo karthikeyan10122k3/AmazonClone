@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { User } from '../../models/user/user';
+import { response } from 'express';
 
 @Injectable({
   providedIn: 'root'
@@ -22,22 +23,26 @@ export class AuthService {
   login(contact: string, password: string): Observable<User> {
     
     return this.http.post<User>(this.LOGIN_URL, { contact, password }).pipe(
-      tap(user => this.setUser(user))
+      tap(response => this.setUser(response))
     );
   }
 
-  private setUser(user: User) {
-    localStorage.setItem('user', JSON.stringify(user));
+  private setUser(response: any) {
+    localStorage.setItem('user', JSON.stringify(response.user));
+    localStorage.setItem('token', JSON.stringify(response.token));
   }
 
-  getToken(): string | null {
-    const storedData = localStorage.getItem('user');
+  getToken() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+    const storedData = localStorage.getItem('token');
     if (!storedData) {
       return null;
     }
     const parsedData = JSON.parse(storedData);
-    const { token } = parsedData;
+    const token = parsedData;
+
     return token
+  }
   }
   
   getUser() {
@@ -47,7 +52,7 @@ export class AuthService {
       return null;
     }
     const parsedData = JSON.parse(storedData);
-    const {user} = parsedData;
+    const user = parsedData;
     return user
 
     }
@@ -56,5 +61,6 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
   }
 }

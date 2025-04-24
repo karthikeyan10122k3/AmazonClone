@@ -135,11 +135,6 @@ export class CartService {
     return this.subtotalBehaviourSubject.asObservable();
   }
 
-  findItem(cartItem: Product): Boolean {
-    const isItemPresent = this.cartList.find(prod => prod.product.id === cartItem.id);
-    return !!isItemPresent;
-  }
-
   updateUserCart() {
     const user = this.authService.getUser();
     

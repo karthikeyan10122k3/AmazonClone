@@ -65,7 +65,6 @@ export class CartComponent implements OnInit {
     const user = this.authService.getUser();
     if (!user) return;
     
-    // Update product stock
     this.productService.getProducts().subscribe(productList => {
       this.cartItems.forEach(cartItem => {
         const product = productList.find(prod => prod.id === cartItem.product.id);
@@ -74,15 +73,6 @@ export class CartComponent implements OnInit {
           if (product.stock < 0) product.stock = 0; 
         }
       });
-
-      // Update user orders
-      user.orders = [
-        ...(user.orders || []), 
-        ...this.cartItems.map(item => ({
-          product: item.product,
-          quantity: item.quantity
-        }))
-      ];
 
       const ordersToAdd = this.cartItems.map(item => ({
         product: item.product,
@@ -97,5 +87,33 @@ export class CartComponent implements OnInit {
       this.productService.syncProducts(productList);
  
     });
+  }
+
+  buyAgain(buyingProduct : any) {
+    const confirmBuy = confirm("Are you sure you want to buy this product?");
+    if (!confirmBuy) return;
+  
+    const user = this.authService.getUser();
+    if (!user) {
+      return;
+    }
+  
+    const orderedProduct: Orders = {
+      product: {
+        id: buyingProduct.id,
+        title: buyingProduct.title,
+        description: buyingProduct.description,
+        price: buyingProduct.price,
+        stock: buyingProduct.stock,
+        discountPercentage: buyingProduct.discountPercentage || 0,
+        rating: buyingProduct.rating,
+        availabilityStatus: buyingProduct.availabilityStatus,
+        minimumOrderQuantity: buyingProduct.minimumOrderQuantity,
+        thumbnail: buyingProduct.thumbnail,
+      },
+      quantity: 1
+    };
+  
+    this.ordersService.addSingleOrderItem(orderedProduct);
   }
 }
